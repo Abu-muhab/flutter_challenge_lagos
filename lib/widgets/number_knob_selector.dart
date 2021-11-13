@@ -5,13 +5,11 @@ class NumberKnobSelector extends StatefulWidget {
   final Color fillColor;
   final Color markingsColor;
   final Color trackColor;
-  final Widget? icon;
 
   NumberKnobSelector(
       {this.fillColor = Colors.black,
       this.markingsColor = Colors.blueGrey,
-      this.trackColor = Colors.green,
-      this.icon});
+      this.trackColor = Colors.green});
 
   @override
   _NumberKnobSelectorState createState() => _NumberKnobSelectorState();
@@ -21,6 +19,7 @@ class _NumberKnobSelectorState extends State<NumberKnobSelector> {
   Offset? touchStart;
   Offset? touchUpdate;
   double knobLocation = pi - pi / 4;
+  int value=30;
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +46,10 @@ class _NumberKnobSelectorState extends State<NumberKnobSelector> {
             CustomPaint(
               size: Size(constraints.maxWidth, constraints.maxHeight),
               painter: LightControllerPainter(
-                  onNewLocationCalculated: (location) {
+                  onNewLocationCalculated: (location,value) {
                     setState(() {
                       knobLocation = location;
+                      this.value=value;
                     });
                   },
                   trackColor: widget.trackColor,
@@ -58,6 +58,63 @@ class _NumberKnobSelectorState extends State<NumberKnobSelector> {
                   markingsColor: widget.markingsColor,
                   touchStart: touchStart,
                   touchUpdate: touchUpdate),
+            ),
+            Center(
+              child: Container(
+                width: constraints.maxWidth / 2,
+                height: constraints.maxWidth / 2.5,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Temperature",
+                      style: TextStyle(
+                          fontSize: constraints.maxWidth * 0.06,
+                          color: widget.trackColor),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          text: "${value.toString()}°",
+                          style: TextStyle(
+                              fontSize: constraints.maxWidth * 0.23,
+                              color: widget.trackColor),
+                          children: [
+                            TextSpan(
+                                text: "C",
+                                style: TextStyle(
+                                    fontSize: constraints.maxWidth * 0.08,
+                                    color: widget.trackColor))
+                          ]),
+                    ),
+                    Expanded(
+                        child: FittedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            Icons.ac_unit,
+                            color: Colors.blueGrey,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.access_time,
+                            color: Colors.blueGrey,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(
+                            Icons.add_to_queue,
+                            color: Colors.blueGrey,
+                          )
+                        ],
+                      ),
+                    ))
+                  ],
+                ),
+              ),
             )
           ],
         ),
@@ -73,7 +130,7 @@ class LightControllerPainter extends CustomPainter {
   Color fillColor;
   Color markingsColor;
   Color trackColor;
-  void Function(double)? onNewLocationCalculated;
+  void Function(double,int)? onNewLocationCalculated;
 
   LightControllerPainter(
       {this.touchStart,
@@ -119,7 +176,7 @@ class LightControllerPainter extends CustomPainter {
           ((lineEndpointBig.dx * 8) + (center.dx * 1)) / (8 + 1),
           ((lineEndpointBig.dy * 8) + (center.dy * 1)) / (8 + 1));
 
-      paint.color = markingsColor;
+      paint.color = trackColor;
       if ((x % 30) == 0) {
         paint.strokeWidth = 4;
         canvas.drawLine(lineStartPoint, lineEndpointBig, paint);
@@ -157,7 +214,7 @@ class LightControllerPainter extends CustomPainter {
           double newLocation =
               atan2(touchUpdate!.dy - center.dy, touchUpdate!.dx - center.dx);
           WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            onNewLocationCalculated!(newLocation);
+            onNewLocationCalculated!(newLocation,(((knobLocation * 180 / pi) / 360) * 80).floor());
           });
         }
       }
@@ -173,7 +230,7 @@ class LightControllerPainter extends CustomPainter {
     TextPainter textPainter = TextPainter(
         text: TextSpan(
             text: (((knobLocation * 180 / pi) / 360) * 80).floor().toString(),
-            style: TextStyle(color: trackColor, fontSize: 25)),
+            style: TextStyle(color: trackColor, fontSize: size.width*0.07)),
         textAlign: TextAlign.center,
         maxLines: 1,
         textDirection: TextDirection.ltr);

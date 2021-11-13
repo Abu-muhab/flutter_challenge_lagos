@@ -46,10 +46,6 @@ class Home extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.width * 0.8,
               child: NumberKnobSelector(
-                icon: Image.asset(
-                  "images/lamp.png",
-                  fit: BoxFit.fill,
-                ),
                 trackColor: Colors.green,
                 markingsColor: Colors.blueGrey,
                 fillColor: Colors.blueGrey[900]!,
