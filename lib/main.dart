@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lagos_challenge/widgets/knob_selector.dart';
-import 'package:flutter_lagos_challenge/widgets/number_knob_selector.dart';
 import 'package:flutter_lagos_challenge/widgets/view_holder.dart';
 
 void main() {
