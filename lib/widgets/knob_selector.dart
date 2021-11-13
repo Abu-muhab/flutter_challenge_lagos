@@ -21,6 +21,7 @@ class KnobSelector extends StatefulWidget {
 class _KnobSelectorState extends State<KnobSelector> {
   Offset? touchStart;
   Offset? touchUpdate;
+  Color color = Colors.yellow;
   double knobLocation = pi / 2;
 
   @override
@@ -48,9 +49,10 @@ class _KnobSelectorState extends State<KnobSelector> {
             CustomPaint(
               size: Size(constraints.maxWidth, constraints.maxHeight),
               painter: LightControllerPainter(
-                  onNewLocationCalculated: (location) {
+                  onNewLocationCalculated: (location, color) {
                     setState(() {
                       knobLocation = location;
+                      this.color = color;
                     });
                   },
                   knobLocation: knobLocation,
@@ -61,7 +63,7 @@ class _KnobSelectorState extends State<KnobSelector> {
             ),
             Center(
               child: CircleAvatar(
-                backgroundColor: widget.iconContainerColor,
+                backgroundColor: color,
                 radius: constraints.maxHeight * 0.16,
                 child: widget.icon != null ? widget.icon : Container(),
               ),
@@ -79,7 +81,7 @@ class LightControllerPainter extends CustomPainter {
   double knobLocation;
   Color fillColor;
   Color markingsColor;
-  void Function(double)? onNewLocationCalculated;
+  void Function(double, Color)? onNewLocationCalculated;
 
   LightControllerPainter(
       {this.touchStart,
@@ -205,8 +207,22 @@ class LightControllerPainter extends CustomPainter {
           if (center.dx > touchUpdate!.dx) {
             newLocation += pi;
           }
+
+          //calculate color
+          int colorIndex =
+              (((newLocation / pi).abs()) * radialColors.length - 1)
+                  .floor()
+                  .toInt()
+                  .abs();
+          if (colorIndex < 0) {
+            colorIndex = 0;
+          } else if (colorIndex > radialColors.length - 1) {
+            colorIndex = radialColors.length - 1;
+          }
+          Color c = radialColors[colorIndex];
+
           WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            onNewLocationCalculated!(newLocation);
+            onNewLocationCalculated!(newLocation, c);
           });
         }
       }
