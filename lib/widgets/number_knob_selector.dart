@@ -19,7 +19,7 @@ class _NumberKnobSelectorState extends State<NumberKnobSelector> {
   Offset? touchStart;
   Offset? touchUpdate;
   double knobLocation = pi - pi / 4;
-  int value=30;
+  int value = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +46,10 @@ class _NumberKnobSelectorState extends State<NumberKnobSelector> {
             CustomPaint(
               size: Size(constraints.maxWidth, constraints.maxHeight),
               painter: LightControllerPainter(
-                  onNewLocationCalculated: (location,value) {
+                  onNewLocationCalculated: (location, value) {
                     setState(() {
                       knobLocation = location;
-                      this.value=value;
+                      this.value = value;
                     });
                   },
                   trackColor: widget.trackColor,
@@ -130,7 +130,7 @@ class LightControllerPainter extends CustomPainter {
   Color fillColor;
   Color markingsColor;
   Color trackColor;
-  void Function(double,int)? onNewLocationCalculated;
+  void Function(double, int)? onNewLocationCalculated;
 
   LightControllerPainter(
       {this.touchStart,
@@ -214,7 +214,8 @@ class LightControllerPainter extends CustomPainter {
           double newLocation =
               atan2(touchUpdate!.dy - center.dy, touchUpdate!.dx - center.dx);
           WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-            onNewLocationCalculated!(newLocation,(((knobLocation * 180 / pi) / 360) * 80).floor());
+            onNewLocationCalculated!(
+                newLocation, (((knobLocation * 180 / pi) / 360) * 80).floor());
           });
         }
       }
@@ -230,7 +231,7 @@ class LightControllerPainter extends CustomPainter {
     TextPainter textPainter = TextPainter(
         text: TextSpan(
             text: (((knobLocation * 180 / pi) / 360) * 80).floor().toString(),
-            style: TextStyle(color: trackColor, fontSize: size.width*0.07)),
+            style: TextStyle(color: trackColor, fontSize: size.width * 0.07)),
         textAlign: TextAlign.center,
         maxLines: 1,
         textDirection: TextDirection.ltr);

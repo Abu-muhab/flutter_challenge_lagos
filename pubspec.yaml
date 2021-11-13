@@ -47,6 +47,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/lamp.png
+    - images/down-arrow.png
+    - images/monitor.png
+    - images/air-conditioner.png
+    - images/lampp.png
+    - images/musical-note.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
