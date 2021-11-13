@@ -108,9 +108,10 @@ class LightControllerPainter extends CustomPainter {
 
     //draw outer circle
     paint.color = Colors.red;
-    paint.shader = SweepGradient(colors: radialColors).createShader(Rect.fromCircle(
-        center: Offset(size.width / 2, size.width / 2),
-        radius: outerCircleRadius));
+    paint.shader = SweepGradient(colors: radialColors).createShader(
+        Rect.fromCircle(
+            center: Offset(size.width / 2, size.width / 2),
+            radius: outerCircleRadius));
     canvas.drawCircle(center, outerCircleRadius, paint);
 
     //draw inner circle
@@ -174,9 +175,10 @@ class LightControllerPainter extends CustomPainter {
     //draw knob
     paint.style = PaintingStyle.fill;
     paint.strokeWidth = 0.0;
-    paint.shader = SweepGradient(colors: radialColors).createShader(Rect.fromCircle(
-        center: Offset(size.width / 2, size.width / 2),
-        radius: outerCircleRadius));
+    paint.shader = SweepGradient(colors: radialColors).createShader(
+        Rect.fromCircle(
+            center: Offset(size.width / 2, size.width / 2),
+            radius: outerCircleRadius));
     paint.strokeWidth = 0.0;
     double knobRadius = (outerCircleRadius - innerCircleRadius) * 1.2;
     double knobYDistanceFromCenter =
