@@ -11,7 +11,7 @@ class KnobSelector extends StatefulWidget {
   KnobSelector(
       {this.fillColor = Colors.black,
       this.markingsColor = Colors.blueGrey,
-        this.iconContainerColor=Colors.yellow,
+      this.iconContainerColor = Colors.yellow,
       this.icon});
 
   @override
@@ -91,6 +91,14 @@ class LightControllerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    List<Color> radialColors = [
+      Colors.deepOrange,
+      Colors.yellow,
+      Colors.green,
+      Colors.blue,
+      Colors.redAccent
+    ];
+
     //circle radius
     Offset center = Offset(size.width / 2, size.width / 2);
     double outerCircleRadius = size.width / 2.45;
@@ -100,13 +108,7 @@ class LightControllerPainter extends CustomPainter {
 
     //draw outer circle
     paint.color = Colors.red;
-    paint.shader = SweepGradient(colors: [
-      Colors.deepOrange,
-      Colors.yellow,
-      Colors.green,
-      Colors.blue,
-      Colors.redAccent
-    ]).createShader(Rect.fromCircle(
+    paint.shader = SweepGradient(colors: radialColors).createShader(Rect.fromCircle(
         center: Offset(size.width / 2, size.width / 2),
         radius: outerCircleRadius));
     canvas.drawCircle(center, outerCircleRadius, paint);
@@ -172,7 +174,9 @@ class LightControllerPainter extends CustomPainter {
     //draw knob
     paint.style = PaintingStyle.fill;
     paint.strokeWidth = 0.0;
-    paint.color = Colors.black;
+    paint.shader = SweepGradient(colors: radialColors).createShader(Rect.fromCircle(
+        center: Offset(size.width / 2, size.width / 2),
+        radius: outerCircleRadius));
     paint.strokeWidth = 0.0;
     double knobRadius = (outerCircleRadius - innerCircleRadius) * 1.2;
     double knobYDistanceFromCenter =
