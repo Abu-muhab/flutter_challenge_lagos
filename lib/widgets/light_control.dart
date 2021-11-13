@@ -1,14 +1,24 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LightControl extends StatefulWidget {
+class KnobSelector extends StatefulWidget {
+  final Color fillColor;
+  final Color markingsColor;
+  final Color iconContainerColor;
+  final Widget? icon;
+
+  KnobSelector(
+      {this.fillColor = Colors.black,
+      this.markingsColor = Colors.blueGrey,
+        this.iconContainerColor=Colors.yellow,
+      this.icon});
+
   @override
-  _LightControlState createState() => _LightControlState();
+  _KnobSelectorState createState() => _KnobSelectorState();
 }
 
-class _LightControlState extends State<LightControl> {
+class _KnobSelectorState extends State<KnobSelector> {
   Offset? touchStart;
   Offset? touchUpdate;
   double knobLocation = pi / 2;
@@ -33,17 +43,30 @@ class _LightControlState extends State<LightControl> {
             touchStart = null;
           });
         },
-        child: CustomPaint(
-          size: Size(constraints.maxWidth, constraints.maxHeight),
-          painter: LightControllerPainter(
-              onNewLocationCalculated: (location) {
-                setState(() {
-                  knobLocation = location;
-                });
-              },
-              knobLocation: knobLocation,
-              touchStart: touchStart,
-              touchUpdate: touchUpdate),
+        child: Stack(
+          children: [
+            CustomPaint(
+              size: Size(constraints.maxWidth, constraints.maxHeight),
+              painter: LightControllerPainter(
+                  onNewLocationCalculated: (location) {
+                    setState(() {
+                      knobLocation = location;
+                    });
+                  },
+                  knobLocation: knobLocation,
+                  fillColor: widget.fillColor,
+                  markingsColor: widget.markingsColor,
+                  touchStart: touchStart,
+                  touchUpdate: touchUpdate),
+            ),
+            Center(
+              child: CircleAvatar(
+                backgroundColor: widget.iconContainerColor,
+                radius: constraints.maxHeight * 0.16,
+                child: widget.icon != null ? widget.icon : Container(),
+              ),
+            )
+          ],
         ),
       );
     });
@@ -54,13 +77,17 @@ class LightControllerPainter extends CustomPainter {
   Offset? touchStart;
   Offset? touchUpdate;
   double knobLocation;
+  Color fillColor;
+  Color markingsColor;
   void Function(double)? onNewLocationCalculated;
 
   LightControllerPainter(
       {this.touchStart,
       this.touchUpdate,
       this.onNewLocationCalculated,
-      this.knobLocation = 0});
+      this.knobLocation = 0,
+      this.markingsColor = Colors.blueGrey,
+      this.fillColor = Colors.black});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -85,7 +112,7 @@ class LightControllerPainter extends CustomPainter {
     canvas.drawCircle(center, outerCircleRadius, paint);
 
     //draw inner circle
-    paint.color = Colors.black;
+    paint.color = fillColor;
     paint.shader = null;
     canvas.drawCircle(center, innerCircleRadius, paint);
 
@@ -101,7 +128,7 @@ class LightControllerPainter extends CustomPainter {
           ((lineEndpointBig.dx * 8) + (center.dx * 1)) / (8 + 1),
           ((lineEndpointBig.dy * 8) + (center.dy * 1)) / (8 + 1));
 
-      paint.color = Colors.blueGrey;
+      paint.color = markingsColor;
       if ((x % 30) == 0) {
         paint.strokeWidth = 4;
         canvas.drawLine(lineStartPoint, lineEndpointBig, paint);
@@ -112,7 +139,7 @@ class LightControllerPainter extends CustomPainter {
     }
 
     //draw innermost circle
-    paint.color = Colors.grey;
+    paint.color = markingsColor;
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 1;
     canvas.drawCircle(center, innerCircleRadius * 0.95, paint);
@@ -126,7 +153,7 @@ class LightControllerPainter extends CustomPainter {
           ((lineEndpoint.dx * 11) + (center.dx * 1)) / (11 + 1),
           ((lineEndpoint.dy * 11) + (center.dy * 1)) / (11 + 1));
 
-      paint.color = Colors.blueGrey;
+      paint.color = markingsColor;
       paint.strokeWidth = 1;
       canvas.drawLine(lineStartPoint, lineEndpoint, paint);
     }

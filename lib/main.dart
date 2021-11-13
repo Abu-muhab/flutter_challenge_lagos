@@ -22,15 +22,21 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.blueGrey[900]!,
         height: double.infinity,
         width: double.infinity,
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.width * 0.8,
-            child: Container(
-              color: Colors.black87,
-              child: LightControl(),
+            child: KnobSelector(
+              icon: Image.asset(
+                "images/lamp.png",
+                fit: BoxFit.fill,
+              ),
+              iconContainerColor: Colors.yellow,
+              markingsColor: Colors.blueGrey,
+              fillColor: Colors.blueGrey[900]!,
             ),
           ),
         ),
