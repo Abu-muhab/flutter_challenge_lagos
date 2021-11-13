@@ -85,7 +85,7 @@ class LightControllerPainter extends CustomPainter {
     canvas.drawCircle(center, outerCircleRadius, paint);
 
     //draw inner circle
-    paint.color = Colors.white;
+    paint.color = Colors.black;
     paint.shader = null;
     canvas.drawCircle(center, innerCircleRadius, paint);
 
@@ -112,10 +112,39 @@ class LightControllerPainter extends CustomPainter {
     }
 
     //draw innermost circle
+    paint.color = Colors.grey;
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 1;
+    canvas.drawCircle(center, innerCircleRadius * 0.95, paint);
 
     //draw innermost markings
+    for (var x = 0; x < 360; x += 12) {
+      Offset lineEndpoint = Offset(
+          (innerCircleRadius * 0.95) * cos(x * (pi / 180)) + center.dx,
+          (innerCircleRadius * 0.95) * sin(x * (pi / 180)) + center.dy);
+      Offset lineStartPoint = Offset(
+          ((lineEndpoint.dx * 11) + (center.dx * 1)) / (11 + 1),
+          ((lineEndpoint.dy * 11) + (center.dy * 1)) / (11 + 1));
+
+      paint.color = Colors.blueGrey;
+      paint.strokeWidth = 1;
+      canvas.drawLine(lineStartPoint, lineEndpoint, paint);
+    }
+
+    //draw innermost arc
+    paint.color = Colors.grey;
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 5;
+    canvas.drawArc(
+        Rect.fromCircle(center: center, radius: innerCircleRadius * 0.95),
+        knobLocation + pi - pi / 4,
+        pi / 2,
+        false,
+        paint);
 
     //draw knob
+    paint.style = PaintingStyle.fill;
+    paint.strokeWidth = 0.0;
     paint.color = Colors.black;
     paint.strokeWidth = 0.0;
     double knobRadius = (outerCircleRadius - innerCircleRadius) * 1.2;
