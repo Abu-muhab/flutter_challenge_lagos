@@ -186,7 +186,7 @@ class LightControllerPainter extends CustomPainter {
       }
     }
 
-    //draw knob
+    //calculate knob dimensions
     paint.style = PaintingStyle.fill;
     paint.color = fillColor;
     paint.strokeWidth = 0.0;
@@ -199,7 +199,6 @@ class LightControllerPainter extends CustomPainter {
         (innerCircleRadius + (outerCircleRadius - innerCircleRadius) / 2) *
             cos(knobLocation);
 
-    //calculate knobCenter
     Offset knobCenter = Offset(center.dx + knobXDistanceFromCenter,
         center.dy + knobYDistanceFromCenter);
 
@@ -220,12 +219,16 @@ class LightControllerPainter extends CustomPainter {
         }
       }
     }
+
+    //draw knob
     canvas.drawCircle(knobCenter, knobRadius, paint);
     paint.strokeWidth = 3;
     paint.color = trackColor;
     paint.style = PaintingStyle.stroke;
     canvas.drawCircle(knobCenter, knobRadius, paint);
 
+
+    // draw text inside knob
     paint.strokeWidth = 0.0;
     paint.style = PaintingStyle.fill;
     TextPainter textPainter = TextPainter(
